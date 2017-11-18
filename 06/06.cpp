@@ -13,7 +13,7 @@ typedef struct {
 	int pos;
 	int beneficio;
 }tSol;
-
+/*
 // función que resuelve el problema
 void resolver(const vector<int> & datos, int tiempo,tSol & sol) {
 	int maxBeneficio=0;
@@ -21,8 +21,12 @@ void resolver(const vector<int> & datos, int tiempo,tSol & sol) {
 	sol.beneficio = 0;
 	sol.pos = 0;
 	
-	/*Aunque tenga dos bucles for, el coste creo que es O(n), el primer bucle da tamDatos-tiempo vueltas y el segundo siempre da tiempo vueltas
-	por lo que el coste seria O(tiempo*i), donde tiempo es una constante en cada caso*/
+
+	//ASI NO VALE PORQUE PUEDES PONER LA K EN FUNCION DE N entonces deja de ser lineal respecto a k!!!!!!
+
+
+	//Aunque tenga dos bucles for, el coste creo que es O(n), el primer bucle da tamDatos-tiempo vueltas y el segundo siempre da tiempo vueltas
+	//por lo que el coste seria O(tiempo*i), donde tiempo es una constante en cada caso/
 	for (int i = 0; i <= tamDatos-tiempo; i++){ //este bucle da tamDatos-tiempo vueltas por lo que es linear respecto a tamDatos
 		int benef = 0;
 		int k = i + tiempo;
@@ -35,7 +39,29 @@ void resolver(const vector<int> & datos, int tiempo,tSol & sol) {
 			sol.pos = i;
 		}
 	}
+}*/
+
+void resolver(const vector<int> & datos, int tiempo, tSol & sol) {
+	int tamDatos = datos.size();
+	int benef = 0;
+
+	for (int i = 0; i < tiempo; i++){
+		benef += datos[i];
+	}
+	sol.beneficio = benef;
+	
+	for (int i = 0; i < tamDatos - tiempo; i++){ 
+		benef = benef + datos[i+tiempo];
+		benef = benef - datos[i];
+
+		if (benef >= sol.beneficio){
+			sol.beneficio = benef;
+			sol.pos = i + 1;
+		}
+	}
 }
+
+
 
 // Resuelve un caso de prueba, leyendo de la entrada la
 // configuración, y escribiendo la respuesta
@@ -45,7 +71,7 @@ void resuelveCaso() {
 	int tiempo;
 	int vagones;
 	vector<int> datos;
-	tSol sol;
+	tSol sol; sol.pos = 0; sol.beneficio = 0;
 	cin >> vagonesTotales >> tiempo;
 	for (int i = 0; i < vagonesTotales; i++){
 		cin >> vagones;

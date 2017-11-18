@@ -12,49 +12,36 @@ using namespace std;
 typedef struct {
 	int ini;
 	int fin;
-}tRango;
+}tSol;
 
 
 /*
 	El coste de esta funcion es lineal, recorremos el vector una sola vez y procesamos cada dato una sola vez. O(n)
 */
 
-// función que resuelve el problema
-tRango resolver(const vector<int> & datos, const int & t) {
-	tRango aux; aux.ini = -1; aux.fin = -1;
-	tRango sol; sol.ini = -1; sol.fin = -1;
-	bool enRango = false;
+void resolver(const vector<int> & datos, const int & t, tSol & sol){
+
 	int tamDatos = datos.size();
 
-	for (int i = 0; i < tamDatos;i++){
-		int dato = datos[i];
-		if (dato > t && !enRango){ // si tenemos buena altura
-			if (sol.ini == -1){
-				sol.ini = i;
-			}
-			enRango = true;
-			aux.ini = i;
-		}
-		else if (dato <= t && enRango){
-			aux.fin = i - 1;
-			enRango = false;
-			if (sol.fin == -1){
-				sol.fin = aux.fin;
-			}
-			if ((aux.fin - aux.ini) > (sol.fin - sol.ini)){
-				sol = aux;
-			}
-		}
-		if (i == tamDatos - 1 && enRango ){
-			if ((i - aux.ini) > (sol.fin - sol.ini) || sol.fin == -1){
-				sol.fin = i;
-				sol.ini = aux.ini;
-				enRango = false;
-			}
-		}
+	int i = 0;
+	int iniUltSeg = 0;
+	int maxLong = 0;
+	int ini = 0;
 
+	while (i<tamDatos){
+		if (datos[i] > t){
+			if (maxLong < i - iniUltSeg + 1){
+				ini = iniUltSeg;
+				maxLong = i - iniUltSeg + 1;
+			}
+		}
+		else{
+			iniUltSeg = i + 1;
+		}
+		i++;
 	}
-	return sol;
+	sol.ini = ini;
+	sol.fin = ini + maxLong - 1;
 }
 
 // Resuelve un caso de prueba, leyendo de la entrada la
@@ -65,7 +52,7 @@ void resuelveCaso() {
 	int nrEdificios;
 	int t;
 	int dato;
-	tRango sol;
+	tSol sol;
 
 	cin >> nrEdificios >> t;
 
@@ -73,7 +60,7 @@ void resuelveCaso() {
 		cin >> dato;
 		datos.push_back(dato);
 	}
-	sol = resolver(datos, t);
+	resolver(datos, t,sol);
 	cout << sol.ini << " " << sol.fin << endl;
 }
 

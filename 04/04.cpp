@@ -31,17 +31,16 @@ de correcto, el otro)
 
 using namespace std;
 
-// función que resuelve el problema
 void resolver(const vector<int> & datos, vector<int> & sol) {
 	int tamDatos = datos.size();
-	int i = 1;
-	sol[tamDatos -1] = datos[tamDatos-1];
-	while (i < tamDatos){
-		sol[tamDatos - 1 - i] = sol[tamDatos - i] + datos[tamDatos - 1 - i];
-		i++;
+	int i = tamDatos-1;
+	sol[i] = datos[i];
+	while (0 <= i-1){
+		sol[i-1] = sol[i] + datos[i-1];
+		i--;
 	}
-
 }
+
 
 // Resuelve un caso de prueba, leyendo de la entrada la
 // configuración, y escribiendo la respuesta
