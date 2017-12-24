@@ -7,10 +7,20 @@ using namespace std;
 // Usuario del Juez: E60
 
 
+
+/*
+	Coste en el caso peor: tamaño de los datos n = (fin - ini)/2, es decir que el minimo se encuentre 
+	en alguno de los extremos, como no miramos las de partes porque miramos la mitad y si el valor medio
+	es menor que el valor que hay a la derecha sabemos que el minimo pude estar en el lado contrario,
+	ya que el vector esta ordenado de forma creciente y decreciente, o decreciente y creciente,
+	por lo que miraremos solo una parte del fector y no todo.
+
+	T(n) = {c1  si n = 1}
+	T(n) = {T(n/2) + c1 si n > 1}
+	En conclusion, en el peor de los casos el coste es log n ya que nos vimos obligados a mirar la mitad del vector entera.
+*/
 void resuelve(const vector<int> & datos, int ini, int fin, int & min) {
-	
-	//No estoy seguro de si de esta forma estara bien. De esta manera se mira todo el vector
-	//pero podrian obiarse ciertas divisiones sabiendo que una mitad es creciente
+
 	if (ini == fin) {
 		if (datos[ini] < min) {
 			min = datos[ini];
@@ -26,10 +36,16 @@ void resuelve(const vector<int> & datos, int ini, int fin, int & min) {
 	}
 	else {
 		int m = (ini + fin) / 2;
-		resuelve(datos, ini, m, min);
-		resuelve(datos, m + 1, fin, min);
+		min = datos[m];
+		if (datos[m + 1] > min) {//si el elemento a la derecha de m es mayor, entonces el min esta en la otra mitad
+			resuelve(datos, ini, m, min);
+		}
+		else if (datos[m + 1] < min) { // si no, si es menor, entonces hay que buscar en esa mitad
+			resuelve(datos, m + 1, fin, min);
+		}
+		
 	}
-	
+
 }
 
 
@@ -57,8 +73,8 @@ int main() {
 #endif 
 
 	int tamDatos;
-	
-	while (cin >> tamDatos){
+
+	while (cin >> tamDatos) {
 		resuelveCaso(tamDatos);
 	}
 
