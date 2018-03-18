@@ -55,6 +55,7 @@ public:
 					ant->sig = this->prim->sig;
 					ant = ant->sig;
 					if (ant != NULL) {
+						delete this->prim;
 						this->prim = ant->sig;
 						this->ult = ant;
 						ant->sig = NULL;
